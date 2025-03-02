@@ -4,25 +4,25 @@ const userContactForm = async (req, res) => {
   try {
     const { name, email, phone, message } = req.body;
     if (!name || !email || !phone || !message) {
-      return res.status(422).json({ error: "Please fill all the fields" });
+      return res.status(400).json({ error: "Please fill all the fields" });
     }
     if (!/^[a-zA-Z ]+$/.test(name)) {
       return res
-        .status(422)
+        .status(400)
         .json({ error: "Name should contain only alphabets" });
     }
     if (!/^\d{10}$/.test(phone)) {
       return res
-        .status(422)
+        .status(400)
         .json({ error: "Phone number should contain only 10 digits" });
     }
     if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(email)) {
-      return res.status(422).json({ error: "Invalid email" });
+      return res.status(400).json({ error: "Invalid email" });
     }
     const userExist = await User.findOne({ $or: [{ email }, { phone }] });
     if (userExist) {
       return res
-        .status(422)
+        .status(400)
         .json({ message: "User with this email or phone already exists" });
     }
 
